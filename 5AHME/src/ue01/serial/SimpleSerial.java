@@ -8,7 +8,9 @@ package ue01.serial;
 import java.util.Arrays;
 import java.util.List;
 import jssc.SerialPort;
+import jssc.SerialPortException;
 import jssc.SerialPortList;
+import jssc.SerialPortTimeoutException;
 
 /**
  *
@@ -47,6 +49,29 @@ public class SimpleSerial implements AutoCloseable{
                 serialPort.closePort();
         }
     }
+
+
+  public boolean setParams (int baudRate, int dataBits, int stopBits, int parity) throws SerialPortException
+  {
+    return serialPort.setParams(baudRate, dataBits, stopBits, parity);
+  }
+
+
+  public boolean writeBytes (byte[] buffer) throws SerialPortException
+  {
+    return serialPort.writeBytes(buffer);
+  }
+
+
+  public byte[] readBytes (int byteCount, int timeout) throws SerialPortException, SerialPortTimeoutException
+  {
+    return serialPort.readBytes(byteCount, timeout);
+  }
+    
+  public void purgeInput() throws SerialPortException
+  {
+    serialPort.purgePort(SerialPort.PURGE_RXCLEAR);
+  }
     
     public final static List<String> findSerialComms()
     {
