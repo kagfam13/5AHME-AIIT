@@ -5,6 +5,7 @@
  */
 package ue01.modbus;
 
+import java.util.Arrays;
 import ue01.serial.SimpleSerial;
 
 
@@ -17,6 +18,7 @@ public abstract class AbstractTelegram implements Telegram {
   private final byte busAddress, funtionCode;
   private final byte[] xmtData;
   private final int lengthOfAnswer;
+  private byte[] received;
 
 
   public AbstractTelegram (SimpleSerial serial, byte busAddres, byte funtionCode, byte[] xmtData, int lengthOfAnswer)
@@ -29,9 +31,9 @@ public abstract class AbstractTelegram implements Telegram {
   }
   
   private static int calcCrC(byte[] data, int start, int cnt) {
-    int crc = 0xFFF;
+    int crc = 0xFFFF;
     for (int i=start; i<start+cnt;i++)
-      crc = crc16(crc, data[1]);
+      crc = crc16(crc, data[i]);
     return crc;
   }  
   
@@ -53,7 +55,7 @@ public abstract class AbstractTelegram implements Telegram {
   public void send () throws Exception
   {
     serial.purgeInput();
-    final int bytesToSend = xmtData.length+4;
+    final int bytesToSend = xmtData.length + 4;
     final byte[] toSend = new byte[bytesToSend];
     toSend[0] = busAddress;
     toSend[1] = funtionCode;
@@ -61,6 +63,7 @@ public abstract class AbstractTelegram implements Telegram {
     final int crc = calcCrC(toSend, 0, bytesToSend-2);
     toSend[bytesToSend-2] = (byte)(crc & 0xFF);
     toSend[bytesToSend-1] = (byte)((crc>>8) & 0xFF);
+    System.out.println("XMT: "+ Arrays.toString(toSend));
     serial.writeBytes(toSend);
   }
 
@@ -69,7 +72,7 @@ public abstract class AbstractTelegram implements Telegram {
   public byte[] receive () throws Exception
   {
     final int bytesToReceive = lengthOfAnswer + 4;
-    final byte[] received = serial.readBytes(bytesToReceive, 5000);
+    received = serial.readBytes(bytesToReceive, 5000);
     // Plausikontrolle
     if (received[0] != busAddress)
       throw new Exception("illegal device address returned");
@@ -77,6 +80,12 @@ public abstract class AbstractTelegram implements Telegram {
       throw new Exception("illegal function code returned");
     return received;
   }
+
+    protected byte[] getReceived() {
+        return received;
+    }
+  
+  
   
   
 }

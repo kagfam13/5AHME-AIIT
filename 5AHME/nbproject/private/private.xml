@@ -7,6 +7,7 @@
             <file>file:/home/kager/Dokumente/5AHME-AIIT/5AHME/src/ue01/modbus/AbstractTelegram.java</file>
             <file>file:/home/kager/Dokumente/5AHME-AIIT/5AHME/src/ue01/modbus/WriteSingleCoilTelegram.java</file>
             <file>file:/home/kager/Dokumente/5AHME-AIIT/5AHME/src/ue01/serial/SimpleSerial.java</file>
+            <file>file:/home/kager/Dokumente/5AHME-AIIT/5AHME/src/ue01/modbus/ReadCoilsTelegram.java</file>
         </group>
     </open-files>
 </project-private>
