@@ -12,6 +12,8 @@ import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import javax.xml.bind.DatatypeConverter;
+import ue02.net.test.CipherTest;
 
 
 /**
@@ -46,14 +48,25 @@ public class SimpleClient
   }
   
   public static void main (String[] args)
-  {  
-    try {
-      final String response = sendRequestAndReceiveResponse("www.htl-kaindorf.ac.at", 80, "GET /index.html HTTP/1.0\n\n");
-      System.out.println("Antwort: " + response);
+  {
+    try
+    {
+      final String response = sendRequestAndReceiveResponse("localhost", 4567, "hallo");
+      System.out.println("Antwort" + response);
     }
     catch (Exception e)
     {
-      e.printStackTrace();
     }
+//    try {
+//      String string = DatatypeConverter.printBase64Binary(CipherTest.encode("test", "hallo"));
+//      System.out.println(string);
+//      
+//      final String response = sendRequestAndReceiveResponse("localhost", 4567, string);
+//      System.out.println("Antwort: " + response);
+//    }
+//    catch (Exception e)
+//    {
+//      e.printStackTrace();
+//    }
   }
 }
